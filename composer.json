@@ -18,8 +18,8 @@
         "ext-curl": "*"
     },
     "require-dev": {
-        "phpunit/php-code-coverage": "^6.0",
-        "phpunit/phpunit": "^7"
+        "phpunit/php-code-coverage": "^4.0",
+        "phpunit/phpunit": "^5"
     },
     "autoload": {
         "psr-4": {
