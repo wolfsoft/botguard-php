@@ -63,7 +63,7 @@ $ composer require wolfsoft/botguard-php
 <?php
 require 'vendor/autoload.php';
 
-use BotGuard;
+use BotGuard\BotGuard;
 
 // the rest of the code
 ```
@@ -76,12 +76,12 @@ Why are you not using [Composer](http://getcomposer.org/)? Download [BotGuard.ph
 <?php
 require 'path/to/BotGuard.php';
 
-use BotGuard;
+use BotGuard\BotGuard;
 
 // the rest of the code
 ```
 
 ## Docs
 
-[EN] [https://botguard.net/en/documentation/integration](https://botguard.net/en/documentation/integration)
-[RU] [https://botguard.net/ru/documentation/integration](https://botguard.net/ru/documentation/integration)
+- [EN] [https://botguard.net/en/documentation/integration](https://botguard.net/en/documentation/integration)
+- [RU] [https://botguard.net/ru/documentation/integration](https://botguard.net/ru/documentation/integration)

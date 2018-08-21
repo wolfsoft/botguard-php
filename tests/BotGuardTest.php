@@ -7,6 +7,16 @@ use BotGuard\BotGuard;
 
 class BotGuardTest extends TestCase {
 
+	public function testInvalidArgumentsOnInstantiating() {
+		$this->expectException(\InvalidArgumentException::class);
+		$botguard = BotGuard::instance([]);
+	}
+
+	public function testMissingArgumentsOnInstantiating() {
+		$this->expectException(\InvalidArgumentException::class);
+		$botguard = BotGuard::instance();
+	}
+
 	public function testInstance() {
 		$botguard = BotGuard::instance([
 			'server' => 'fr-par-o1.botguard.net',
@@ -14,4 +24,20 @@ class BotGuardTest extends TestCase {
 		]);
 		$this->assertNotNull($botguard);
 	}
+
+	public function testMissingArgumentsAfterInstantiating() {
+		$botguard = BotGuard::instance();
+		$this->assertNotNull($botguard);
+	}
+
+	public function testInvalidArgumentsAfterInstantiating() {
+		$this->expectException(\InvalidArgumentException::class);
+		$botguard = BotGuard::instance([]);
+	}
+
+	public function testCheck() {
+		$botguard = BotGuard::instance();
+		$this->assertNotNull($botguard->check());
+	}
+
 }
