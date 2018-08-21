@@ -5,16 +5,6 @@ cache:
   directories:
     - $HOME/.composer/cache
 
-addons:
-  apt:
-    packages:
-      - php-curl
-
-env:
-  global:
-    - setup=basic
-    - coverage=false
-
 php:
   - 5.6
   - 7.0
@@ -32,4 +22,3 @@ script:
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
-
