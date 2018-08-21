@@ -7,7 +7,7 @@
 An integration library for BotGuard Cloud.
 
 ```php
-use BotGuard;
+use BotGuard\BotGuard;
 
 // Initialize BotGuard Service instance
 $botguard = BotGuard::instance([

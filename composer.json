@@ -23,7 +23,7 @@
     },
     "autoload": {
         "psr-4": {
-            "": "src/"
+            "BotGuard\\": "src/"
         }
     },
     "autoload-dev": {
@@ -31,14 +31,10 @@
             "Tests\\": "tests/"
         }
     },
-    "config": {
-        "process-timeout": 0,
-        "sort-packages": true
-    },
     "scripts": {
         "test": [
             "@phpunit"
         ],
-        "phpunit": "vendor/phpunit/phpunit/phpunit --verbose --coverage-clover=coverage.xml ./tests/"
+        "phpunit": "vendor/phpunit/phpunit/phpunit --verbose --coverage-clover=coverage.xml"
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-use BotGuard;
+use BotGuard\BotGuard;
 
 /*
 	Initialize BotGuard Service instance
