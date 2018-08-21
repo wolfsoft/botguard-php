@@ -40,4 +40,16 @@ class BotGuardTest extends TestCase {
 		$this->assertNotNull($botguard->check());
 	}
 
+	public function testChallenge() {
+		$botguard = BotGuard::instance();
+		$profile = $botguard->check();
+		$botguard->challenge($profile);
+	}
+
+	public function testSingletonClone() {
+		$botguard = BotGuard::instance();
+		$this->expectException(\Error::class);
+		$copy = clone $botguard;
+	}
+
 }
