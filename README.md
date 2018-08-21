@@ -2,6 +2,7 @@
 
 [![Latest Stable Version](https://poser.pugx.org/wolfsoft/botguard-php/v/stable)](https://packagist.org/packages/wolfsoft/botguard-php)
 [![Build Status](https://travis-ci.org/wolfsoft/botguard-php.svg?branch=master)](https://travis-ci.org/wolfsoft/botguard-php)
+[![codecov](https://codecov.io/gh/wolfsoft/botguard-php/branch/master/graph/badge.svg)](https://codecov.io/gh/wolfsoft/botguard-php)
 [![License](https://poser.pugx.org/wolfsoft/botguard-php/license)](https://packagist.org/packages/wolfsoft/botguard-php)
 
 An integration library for BotGuard Cloud.
