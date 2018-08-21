@@ -47,9 +47,11 @@ class BotGuardTest extends TestCase {
 	}
 
 	public function testSingletonClone() {
-		$botguard = BotGuard::instance();
-		$this->expectException(\Error::class);
-		$copy = clone $botguard;
+		if (defined('PHP_MAJOR_VERSION') && PHP_MAJOR_VERSION == 7) {
+			$botguard = BotGuard::instance();
+			$this->expectException(\Error::class);
+			$copy = clone $botguard;
+		}
 	}
 
 }
