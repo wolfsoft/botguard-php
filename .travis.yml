@@ -1,0 +1,46 @@
+language: php
+
+cache:
+  apt: true
+  directories:
+    - $HOME/.composer/cache
+
+addons:
+  apt:
+    packages:
+      - php-curl
+
+env:
+  global:
+    - setup=basic
+    - coverage=false
+
+sudo: false
+
+before_install:
+  - if [[ $coverage = 'false' ]]; then phpenv config-rm xdebug.ini; fi
+
+install:
+  - if [[ $setup = 'basic'  ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest; fi
+  - if [[ $setup = 'stable' ]]; then travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable; fi
+  - |
+    if [[ $setup = 'lowest' ]]; then
+        travis_retry composer update --prefer-dist --no-interaction --no-suggest --prefer-stable --prefer-lowest
+    fi
+
+script:
+  - composer phpunit
+
+after_success:
+  - if [[ $coverage = 'true' ]]; then bash <(curl -s https://codecov.io/bash); fi
+
+matrix:
+  include:
+    - php: 5.6
+    - php: 7.0
+    - php: 7.1
+    - php: 7.2
+    - php: 7.2
+      env:
+        - setup=stable
+        - coverage=true

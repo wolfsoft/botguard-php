@@ -1,15 +1,44 @@
 {
     "name": "wolfsoft/botguard-php",
     "type": "library",
-    "description": "PHP Integration Library for BotGuard web site protection service",
+    "description": "PHP Integration Library for BotGuard web site protection service.",
     "keywords": ["botguard","api"],
     "homepage": "https://botguard.net/en/documentation/integration",
+    "support": {
+        "issues": "https://github.com/wolfsoft/botguard-php/issues",
+        "source": "https://github.com/wolfsoft/botguard-php"
+    },
     "license": "MIT",
+    "authors": [{
+        "name": "Dennis Prochko",
+        "email": "wolfsoft@mail.ru"
+    }],
     "require": {
         "php": ">=5.6.0",
         "ext-curl": "*"
     },
+    "require-dev": {
+        "phpunit/php-code-coverage": "^6.0",
+        "phpunit/phpunit": "^7"
+    },
     "autoload": {
-        "classmap": ["src/"]
+        "psr-4": {
+            "": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": [
+            "@phpunit"
+        ],
+        "phpunit": "vendor/phpunit/phpunit/phpunit --verbose --coverage-clover=coverage.xml ./tests/"
     }
 }
