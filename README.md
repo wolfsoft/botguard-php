@@ -82,7 +82,11 @@ use BotGuard\BotGuard;
 // the rest of the code
 ```
 
-## Docs
+## Documentation
+
+- [https://wolfsoft.github.io/botguard-php/](https://wolfsoft.github.io/botguard-php/)
+
+### Integration Guide
 
 - [EN] [https://botguard.net/en/documentation/integration](https://botguard.net/en/documentation/integration)
 - [RU] [https://botguard.net/ru/documentation/integration](https://botguard.net/ru/documentation/integration)
