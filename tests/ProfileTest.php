@@ -8,8 +8,9 @@ use BotGuard\Profile;
 class ProfileTest extends TestCase {
 
 	public function testProfileGetScore() {
-		$profile = new Profile();
-		$this->assertTrue($profile->getScore() == 0);
+		$header = "HTTP/1.1 403 Forbidden\nConnection: keep-alive\nX-Score: 5";
+		$profile = new Profile($header);
+		$this->assertTrue($profile->getScore() == 5);
 	}
 
 }

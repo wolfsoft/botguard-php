@@ -19,8 +19,8 @@ class BotGuardTest extends TestCase {
 
 	public function testInstance() {
 		$botguard = BotGuard::instance([
-			'server' => 'fr-par-o1.botguard.net',
-			'backup' => 'de-fra-h1.botguard.net',
+			'server' => 'de-fra-h1.botguard.net',
+			'backup' => 'ru-spb-m1.botguard.net',
 		]);
 		$this->assertNotNull($botguard);
 	}
@@ -35,15 +35,32 @@ class BotGuardTest extends TestCase {
 		$botguard = BotGuard::instance([]);
 	}
 
+	public function testCheckCLI() {
+		$botguard = BotGuard::instance();
+		$this->expectException(\InvalidArgumentException::class);
+		$botguard->check();
+	}
+
 	public function testCheck() {
 		$botguard = BotGuard::instance();
-		$this->assertNotNull($botguard->check());
+		$_SERVER['SERVER_NAME'] = 'example.com';
+		$_SERVER['REMOTE_ADDR'] = '66.249.64.223';
+		$_SERVER['REQUEST_METHOD'] = 'GET';
+		$_SERVER['HTTPS'] = 'off';
+		$_SERVER['SERVER_PROTOCOL'] = 'HTTP/1.1';
+		$_SERVER['REQUEST_URI'] = '/';
+		$_SERVER['HTTP_USER_AGENT'] = 'Mozilla/5.0 (compatible; Googlebot/2.1; +http://www.google.com/bot.html)';
+		$profile = $botguard->check();
+		$this->assertNotNull($profile);
+		$this->assertTrue($profile->getScore() == 0);
 	}
 
 	public function testChallenge() {
 		$botguard = BotGuard::instance();
+/*
 		$profile = $botguard->check();
 		$botguard->challenge($profile);
+*/
 	}
 
 	public function testSingletonClone() {
