@@ -57,10 +57,8 @@ class BotGuardTest extends TestCase {
 
 	public function testChallenge() {
 		$botguard = BotGuard::instance();
-/*
-		$profile = $botguard->check();
-		$botguard->challenge($profile);
-*/
+		$this->expectOutputRegex('/DOCTYPE html PUBLIC/');
+		$botguard->challenge();
 	}
 
 	public function testSingletonClone() {

@@ -34,6 +34,7 @@ class BotGuard {
 		curl_setopt_array($this->curl, [
 			CURLOPT_URL => 'http://' . $this->params['server'] . '/check',
 			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
+			CURLOPT_HEADER => true,
 			CURLOPT_HTTPHEADER => [
 				'Connection: Keep-Alive',
 				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
@@ -55,8 +56,30 @@ class BotGuard {
 		return new Profile($header);
 	}
 
-	public function challenge(Profile $profile) {
-		//TODO implement it
+	public function challenge() {
+		$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+		curl_setopt_array($this->curl, [
+			CURLOPT_URL => 'http://' . $this->params['server'] . '/challenge',
+			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
+			CURLOPT_HEADER => false,
+			CURLOPT_HTTPHEADER => [
+				'Connection: Keep-Alive',
+				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
+				'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
+				'X-Forwarded-Method: ' . $_SERVER['REQUEST_METHOD'],
+				'X-Forwarded-Proto: ' . $proto,
+				'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
+				'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI']
+			]
+		]);
+
+		$response = curl_exec($this->curl);
+
+		@header('HTTP/1.0 403 Forbidden');
+		if ($response !== false) {
+			@header('Content-Type: text/html');
+			echo $response;
+		}
 	}
 
 	private function __construct() {
@@ -75,8 +98,7 @@ class BotGuard {
 				CURLOPT_CONNECTTIMEOUT => 1,
 				CURLOPT_TIMEOUT => 1,
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-				CURLOPT_RETURNTRANSFER => true,
-				CURLOPT_HEADER => true
+				CURLOPT_RETURNTRANSFER => true
 			]);
 		}
 	}

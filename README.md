@@ -36,7 +36,7 @@ if ($profile->getScore() >= 5) {
 // score 1..4
 if ($profile->getScore() > 0) {
 	// Do a transparent challenge (check user browser)
-	$botguard->challenge($profile);
+	$botguard->challenge();
 	exit;
 }
 
