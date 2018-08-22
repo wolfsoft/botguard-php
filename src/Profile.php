@@ -6,7 +6,7 @@ class Profile {
 
 	private $headers;
 
-	public function __construct(string $http_response) {
+	public function __construct($http_response) {
 		$this->headers = [];
 		$lines = array_filter(array_map('trim', explode("\n", $http_response)));
 		array_walk($lines, function($x) {
