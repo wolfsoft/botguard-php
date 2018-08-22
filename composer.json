@@ -36,6 +36,7 @@
         "test": [
             "@phpunit"
         ],
-        "phpunit": "vendor/phpunit/phpunit/phpunit --verbose --coverage-clover=coverage.xml"
+        "phpunit": "vendor/phpunit/phpunit/phpunit --verbose --coverage-clover=coverage.xml",
+        "docs": "~/bin/phpDocumentor.phar -d src/ -t docs/ --visibility=\"public\""
     }
 }
