@@ -61,7 +61,7 @@ class BotGuard {
 			CURLOPT_URL => 'http://' . $this->params['server'] . '/check',
 			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
 			CURLOPT_HEADER => true,
-			CURLOPT_HTTPHEADER => [
+			CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), [
 				'Connection: Keep-Alive',
 				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
 				'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
@@ -69,7 +69,7 @@ class BotGuard {
 				'X-Forwarded-Proto: ' . $proto,
 				'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
 				'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI']
-			]
+			])
 		]);
 
 		$response = curl_exec($this->curl);
@@ -96,15 +96,22 @@ class BotGuard {
 			CURLOPT_URL => 'http://' . $this->params['server'] . '/challenge',
 			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
 			CURLOPT_HEADER => false,
-			CURLOPT_HTTPHEADER => [
+			CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), [
 				'Connection: Keep-Alive',
-				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
 				'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
+				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
+				'X-Forwarded-Port: ' . $_SERVER['SERVER_PORT'],
 				'X-Forwarded-Method: ' . $_SERVER['REQUEST_METHOD'],
 				'X-Forwarded-Proto: ' . $proto,
 				'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
-				'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI']
-			]
+//TODO it's impossible to obtain these data with PHP
+/*
+				'X-Client-SSLCipher': ',
+				'X-Client-SSLProto: ',
+*/
+				'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI'],
+				'X-Forwarded-Cookie: ' . (isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : '')
+			])
 		]);
 
 		$response = curl_exec($this->curl);
@@ -132,9 +139,21 @@ class BotGuard {
 				CURLOPT_CONNECTTIMEOUT => 1,
 				CURLOPT_TIMEOUT => 1,
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-				CURLOPT_RETURNTRANSFER => true
+				CURLOPT_RETURNTRANSFER => true,
+
 			]);
 		}
+	}
+
+	private function getRequestHeaders() {
+		$headers = [];
+		foreach ($_SERVER as $key => $value) {
+			if (substr($key, 0, 5) <> 'HTTP_')
+				continue;
+			$header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
+			$headers[] = $header . ': ' . $value;
+		}
+		return $headers;
 	}
 
 }
