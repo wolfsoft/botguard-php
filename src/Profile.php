@@ -57,7 +57,7 @@ class Profile {
   * @return int The score.
   */
 	public function getScore() {
-		return $this->headers['X-Score'];
+		return isset($this->headers['X-Score']) ? intval($this->headers['X-Score']) : null;
 	}
 
 }

@@ -57,25 +57,44 @@ class BotGuard {
 			throw new \InvalidArgumentException('$_SERVER global variable is not defined');
 
 		$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+		$headers = [
+			'Connection: Keep-Alive',
+			'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
+			'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
+			'X-Forwarded-Port: ' . $_SERVER['SERVER_PORT'],
+			'X-Forwarded-Method: ' . $_SERVER['REQUEST_METHOD'],
+			'X-Forwarded-Proto: ' . $proto,
+			'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
+			'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI'],
+			'X-Forwarded-Cookie: ' . (isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : '')
+		];
+
+		if (isset($_SERVER['SSL_PROTOCOL'])) {
+			$headers[] = 'X-Client-SSLProto: ' . $_SERVER['SSL_PROTOCOL'];
+		} else if (isset($_SERVER['REDIRECT_SSL_PROTOCOL'])) {
+			$headers[] = 'X-Client-SSLProto: ' . $_SERVER['REDIRECT_SSL_PROTOCOL'];
+		}
+
 		curl_setopt_array($this->curl, [
 			CURLOPT_URL => 'http://' . $this->params['server'] . '/check',
 			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
 			CURLOPT_HEADER => true,
-			CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), [
-				'Connection: Keep-Alive',
-				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
-				'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
-				'X-Forwarded-Method: ' . $_SERVER['REQUEST_METHOD'],
-				'X-Forwarded-Proto: ' . $proto,
-				'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
-				'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI']
-			])
+			CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), $headers)
 		]);
 
 		$response = curl_exec($this->curl);
 		if ($response === false) {
-			//TODO call backup URL
-			return null;
+			curl_setopt_array($this->curl, [
+				CURLOPT_URL => 'http://' . $this->params['backup'] . '/check',
+				CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
+				CURLOPT_HEADER => true,
+				CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), $headers)
+			]);
+
+			$response = curl_exec($this->curl);
+			if ($response === false) {
+				return null;
+			}
 		}
 
 		$header = substr($response, 0, curl_getinfo($this->curl, CURLINFO_HEADER_SIZE));
@@ -92,29 +111,41 @@ class BotGuard {
   */
 	public function challenge() {
 		$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+		$headers = [
+			'Connection: Keep-Alive',
+			'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
+			'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
+			'X-Forwarded-Port: ' . $_SERVER['SERVER_PORT'],
+			'X-Forwarded-Method: ' . $_SERVER['REQUEST_METHOD'],
+			'X-Forwarded-Proto: ' . $proto,
+			'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
+			'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI'],
+			'X-Forwarded-Cookie: ' . (isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : '')
+		];
+
+		if (isset($_SERVER['SSL_PROTOCOL'])) {
+			$headers[] = 'X-Client-SSLProto: ' . $_SERVER['SSL_PROTOCOL'];
+		} else if (isset($_SERVER['REDIRECT_SSL_PROTOCOL'])) {
+			$headers[] = 'X-Client-SSLProto: ' . $_SERVER['REDIRECT_SSL_PROTOCOL'];
+		}
+
 		curl_setopt_array($this->curl, [
 			CURLOPT_URL => 'http://' . $this->params['server'] . '/challenge',
 			CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
 			CURLOPT_HEADER => false,
-			CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), [
-				'Connection: Keep-Alive',
-				'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
-				'X-Forwarded-Host: ' . $_SERVER['SERVER_NAME'],
-				'X-Forwarded-Port: ' . $_SERVER['SERVER_PORT'],
-				'X-Forwarded-Method: ' . $_SERVER['REQUEST_METHOD'],
-				'X-Forwarded-Proto: ' . $proto,
-				'X-Forwarded-Proto-Version: ' . $_SERVER['SERVER_PROTOCOL'],
-//TODO it's impossible to obtain these data with PHP
-/*
-				'X-Client-SSLCipher': ',
-				'X-Client-SSLProto: ',
-*/
-				'X-Forwarded-URI: ' . $_SERVER['REQUEST_URI'],
-				'X-Forwarded-Cookie: ' . (isset($_SERVER['HTTP_COOKIE']) ? $_SERVER['HTTP_COOKIE'] : '')
-			])
+			CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), $headers)
 		]);
 
 		$response = curl_exec($this->curl);
+		if ($response === false) {
+			curl_setopt_array($this->curl, [
+				CURLOPT_URL => 'http://' . $this->params['backup'] . '/challenge',
+				CURLOPT_USERAGENT => $_SERVER['HTTP_USER_AGENT'],
+				CURLOPT_HEADER => false,
+				CURLOPT_HTTPHEADER => array_merge($this->getRequestHeaders(), $headers)
+			]);
+			$response = curl_exec($this->curl);
+		}
 
 		@header('HTTP/1.0 403 Forbidden');
 		if ($response !== false) {
@@ -139,8 +170,7 @@ class BotGuard {
 				CURLOPT_CONNECTTIMEOUT => 1,
 				CURLOPT_TIMEOUT => 1,
 				CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-				CURLOPT_RETURNTRANSFER => true,
-
+				CURLOPT_RETURNTRANSFER => true
 			]);
 		}
 	}
