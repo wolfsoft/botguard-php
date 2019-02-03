@@ -1,7 +1,7 @@
 {
     "name": "wolfsoft/botguard-php",
     "type": "library",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "PHP Integration Library for BotGuard web site protection service.",
     "keywords": ["botguard","api"],
     "homepage": "https://botguard.net/en/documentation/integration",
