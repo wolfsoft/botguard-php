@@ -180,6 +180,8 @@ class BotGuard {
 		foreach ($_SERVER as $key => $value) {
 			if (substr($key, 0, 5) <> 'HTTP_')
 				continue;
+			if (in_array($key, ['HTTP_HOST', 'HTTP_USER_AGENT', 'HTTP_COOKIE']))
+				continue;
 			$header = str_replace(' ', '-', ucwords(str_replace('_', ' ', strtolower(substr($key, 5)))));
 			$headers[] = $header . ': ' . $value;
 		}
