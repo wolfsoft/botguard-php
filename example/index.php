@@ -7,14 +7,18 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
+require_once 'Profile.php';
+require_once 'BotGuard.php';
+
 use BotGuard\BotGuard;
 
 /*
 	Initialize BotGuard Service instance
 */
 $botguard = BotGuard::instance([
-	'server' => 'fr-par-o1.botguard.net',
-	'backup' => 'de-fra-h1.botguard.net',
+	'server' => 'xxx.botguard.net',
+	'backup' => 'yyy.botguard.net',
 ]);
 
 /*
@@ -44,4 +48,4 @@ if ($profile->getScore() > 0) {
 }
 
 // score 0
-echo 'Welcome, human';
+require_once 'index.php.original';
