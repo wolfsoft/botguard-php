@@ -56,7 +56,10 @@ class BotGuard {
 		if (!isset($_SERVER['SERVER_NAME']))
 			throw new \InvalidArgumentException('$_SERVER global variable is not defined');
 
-		$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+		if (isset($this->params['https']) && $this->params['https'])
+			$proto = 'https';
+		else
+			$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
 		$headers = [
 			'Connection: Keep-Alive',
 			'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
@@ -110,7 +113,10 @@ class BotGuard {
   * $_SERVER global variables should be defined.
   */
 	public function challenge() {
-		$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
+		if (isset($this->params['https']) && $this->params['https'])
+			$proto = 'https';
+		else
+			$proto = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off') ? 'https' : 'http';
 		$headers = [
 			'Connection: Keep-Alive',
 			'X-Real-IP: ' . $_SERVER['REMOTE_ADDR'],
