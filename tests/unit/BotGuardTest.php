@@ -75,7 +75,7 @@ Host: example.com\r
 User-Agent: Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:71.0) Gecko/20100101 Firefox/71.0\r
 Referer: http://example.com/some/page\r
 EOT;
-		$_SERVER = json_decode('{"USER":"www-data","HOME":"\/var\/www","REDIRECT_STATUS":"200","SERVER_NAME":"www.domhleb.ru","SERVER_PORT":"443","HTTPS":"on","SERVER_ADDR":"192.168.100.70","REMOTE_PORT":"53532","REMOTE_ADDR":"172.17.0.1","SERVER_SOFTWARE":"nginx\/1.10.3","GATEWAY_INTERFACE":"CGI\/1.1","REQUEST_SCHEME":"http","SERVER_PROTOCOL":"HTTP\/1.1","DOCUMENT_ROOT":"\/var\/www\/html","DOCUMENT_URI":"\/document.php","REQUEST_URI":"\/document.php","SCRIPT_NAME":"\/document.php","CONTENT_LENGTH":"","CONTENT_TYPE":"","REQUEST_METHOD":"GET","QUERY_STRING":"","SCRIPT_FILENAME":"\/var\/www\/html\/document.php","FCGI_ROLE":"RESPONDER","PHP_SELF":"\/fonts\/webfont.woff2","REQUEST_TIME_FLOAT":1538917779.0203,"REQUEST_TIME":1538917779}', true);
+		$_SERVER = json_decode('{"USER":"www-data","HOME":"\/var\/www","REDIRECT_STATUS":"200","SERVER_NAME":"example.com","SERVER_PORT":"443","HTTPS":"on","SERVER_ADDR":"192.168.1.1","REMOTE_PORT":"53532","REMOTE_ADDR":"192.168.1.1","SERVER_SOFTWARE":"nginx\/1.10.3","GATEWAY_INTERFACE":"CGI\/1.1","REQUEST_SCHEME":"http","SERVER_PROTOCOL":"HTTP\/1.1","DOCUMENT_ROOT":"\/var\/www\/html","DOCUMENT_URI":"\/document.php","REQUEST_URI":"\/document.php","SCRIPT_NAME":"\/document.php","CONTENT_LENGTH":"","CONTENT_TYPE":"","REQUEST_METHOD":"GET","QUERY_STRING":"","SCRIPT_FILENAME":"\/var\/www\/html\/document.php","FCGI_ROLE":"RESPONDER","PHP_SELF":"\/var\/www\/html\/document.php","REQUEST_TIME_FLOAT":1538917779.0203,"REQUEST_TIME":1538917779}', true);
 		$profile = $botguard->check();
 		$this->assertNull($profile);
 	}
@@ -88,7 +88,7 @@ Host: www.domhleb.ru\r
 User-Agent: curl/1.2.3\r
 Referer: http://www.domhleb.ru/some/page\r
 EOT;
-		$_SERVER = json_decode('{"USER":"www-data","HOME":"\/var\/www","REDIRECT_STATUS":"200","SERVER_NAME":"www.domhleb.ru","SERVER_PORT":"443","HTTPS":"on","SERVER_ADDR":"192.168.100.70","REMOTE_PORT":"53532","REMOTE_ADDR":"172.17.0.1","SERVER_SOFTWARE":"nginx\/1.10.3","GATEWAY_INTERFACE":"CGI\/1.1","REQUEST_SCHEME":"http","SERVER_PROTOCOL":"HTTP\/1.1","DOCUMENT_ROOT":"\/var\/www\/html","DOCUMENT_URI":"\/document.php","REQUEST_URI":"\/document.php","SCRIPT_NAME":"\/document.php","CONTENT_LENGTH":"","CONTENT_TYPE":"","REQUEST_METHOD":"GET","QUERY_STRING":"","SCRIPT_FILENAME":"\/var\/www\/html\/document.php","FCGI_ROLE":"RESPONDER","PHP_SELF":"\/fonts\/webfont.woff2","REQUEST_TIME_FLOAT":1538917779.0203,"REQUEST_TIME":1538917779}', true);
+		$_SERVER = json_decode('{"USER":"www-data","HOME":"\/var\/www","REDIRECT_STATUS":"200","SERVER_NAME":"www.domhleb.ru","SERVER_PORT":"443","HTTPS":"on","SERVER_ADDR":"192.168.1.1","REMOTE_PORT":"53532","REMOTE_ADDR":"192.168.1.1","SERVER_SOFTWARE":"nginx\/1.10.3","GATEWAY_INTERFACE":"CGI\/1.1","REQUEST_SCHEME":"http","SERVER_PROTOCOL":"HTTP\/1.1","DOCUMENT_ROOT":"\/var\/www\/html","DOCUMENT_URI":"\/document.php","REQUEST_URI":"\/document.php","SCRIPT_NAME":"\/document.php","CONTENT_LENGTH":"","CONTENT_TYPE":"","REQUEST_METHOD":"GET","QUERY_STRING":"","SCRIPT_FILENAME":"\/var\/www\/html\/document.php","FCGI_ROLE":"RESPONDER","PHP_SELF":"\/var\/www\/html\/document.php","REQUEST_TIME_FLOAT":1538917779.0203,"REQUEST_TIME":1538917779}', true);
 		$profile = $botguard->check();
 		$this->assertNotNull($profile);
 		$this->assertTrue($profile->getReason() == 'content_scrapers', var_export($profile, true));

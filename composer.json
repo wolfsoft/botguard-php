@@ -1,7 +1,7 @@
 {
     "name": "wolfsoft/botguard-php",
     "type": "library",
-    "version": "1.1.0",
+    "version": "1.1.1",
     "description": "PHP Integration Library for BotGuard web site protection service.",
     "keywords": ["botguard","api"],
     "homepage": "https://botguard.net/en/documentation/integration",
@@ -19,10 +19,11 @@
         "ext-curl": "*"
     },
     "require-dev": {
-        "php": ">=7.1",
+        "php": "^7.3",
     	"ext-xdebug": "*",
-        "phpunit/phpunit": "^7.0",
-        "phpdocumentor/phpdocumentor": "^2.0"
+    	"symfony/process": "@stable",
+        "phpunit/phpunit": "@stable",
+        "phpdocumentor/phpdocumentor": "@stable"
     },
     "autoload": {
         "psr-4": {
@@ -35,10 +36,12 @@
         }
     },
     "scripts": {
-        "test": [
-            "@phpunit"
-        ],
-        "phpunit": "vendor/phpunit/phpunit/phpunit --stderr --verbose --coverage-clover=coverage.xml",
+    	"test-full" : [
+    		"@test",
+    		"@test-integration"
+    	],
+		"test": "vendor/bin/phpunit --testsuite Unit --stderr --verbose --coverage-clover=coverage.xml",
+		"test-integration": "vendor/bin/phpunit --testsuite Integration --stderr --verbose",
         "docs": "vendor/phpdocumentor/phpdocumentor/bin/phpdoc -d src/ -t docs/ --visibility=\"public\" && rm -rf docs/phpdoc-cache*"
     }
 }
