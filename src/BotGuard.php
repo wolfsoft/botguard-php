@@ -125,12 +125,20 @@ class BotGuard {
 
 	/**
      * Note: Prior to PHP 5.6, a stream opened with php://input could
-     * only be read once;
+     * only be read once.
      *
      * @see http://php.net/manual/en/wrappers.php.php
      */
 	protected function getInputStream() {
-		return file_get_contents('php://input');
+		$request = "{$_SERVER['REQUEST_METHOD']} {$_SERVER['REQUEST_URI']} {$_SERVER['SERVER_PROTOCOL']}\r\n";
+		foreach(getallheaders() as $name => $value) {
+			$request .= "$name: $value\r\n";
+		}
+		$contents = @file_get_contents('php://input');
+		if ($contents) {
+			$request .= "\r\n" . $contents;
+		}
+		return $request;
 	}
 
     private function setParams(array $params = null) {

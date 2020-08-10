@@ -12,6 +12,7 @@ require_once 'Profile.php';
 require_once 'BotGuard.php';
 
 use BotGuard\BotGuard;
+use BotGuard\Profile;
 
 /*
 	Initialize BotGuard Service instance
@@ -29,23 +30,24 @@ $profile = $botguard->check();
 /*
 	Do bot mitigation
 */
-switch ($profile->getMitigation()) {
-	case Profile::MITIGATION_DENY:
-	case Profile::MITIGATION_RETURN_FAKE:
-		http_response_code(403);
-		exit;
-	case Profile::MITIGATION_CHALLENGE:
-		http_response_code(403);
-		$profile->challenge();
-		exit;
-	case Profile::MITIGATION_REDIRECT:
-	case Profile::MITIGATION_CAPTCHA:
-		header('Location: ' . $profile->getMitigationURL(), true, 302);
-		exit;
+if ($profile) {
+	switch ($profile->getMitigation()) {
+		case Profile::MITIGATION_DENY:
+		case Profile::MITIGATION_RETURN_FAKE:
+			http_response_code(403);
+			exit;
+		case Profile::MITIGATION_CHALLENGE:
+			http_response_code(403);
+			$profile->challenge();
+			exit;
+		case Profile::MITIGATION_REDIRECT:
+		case Profile::MITIGATION_CAPTCHA:
+			header('Location: ' . $profile->getMitigationURL(), true, 302);
+			exit;
+	}
 }
 
 /*
 	Transfer of control to the original application
 */
 require_once 'index.php.original';
-
