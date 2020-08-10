@@ -9,6 +9,7 @@ An integration library for BotGuard Cloud.
 
 ```php
 use BotGuard\BotGuard;
+use BotGuard\Profile;
 
 // Initialize BotGuard Service instance
 $botguard = BotGuard::instance([
@@ -19,28 +20,24 @@ $botguard = BotGuard::instance([
 // Check incoming request
 $profile = $botguard->check();
 
-/*
-	Score range:
-	0     Human user or "good" bot
-	1..4  We are in doubts; challenge required
-	5..n  Malicious bot
-*/
-
-// score 5
-if ($profile->getScore() >= 5) {
-	// Block malicious bot
-	http_response_code(403);
-	exit;
+// Do bot mitigation
+if ($profile) {
+	switch ($profile->getMitigation()) {
+		case Profile::MITIGATION_DENY:
+		case Profile::MITIGATION_RETURN_FAKE:
+			http_response_code(403);
+			exit;
+		case Profile::MITIGATION_CHALLENGE:
+			http_response_code(403);
+			$profile->challenge();
+			exit;
+		case Profile::MITIGATION_REDIRECT:
+		case Profile::MITIGATION_CAPTCHA:
+			header('Location: ' . $profile->getMitigationURL(), true, 302);
+			exit;
+	}
 }
 
-// score 1..4
-if ($profile->getScore() > 0) {
-	// Do a transparent challenge (check user browser)
-	$botguard->challenge();
-	exit;
-}
-
-// score 0
 echo 'Welcome, human';
 ```
 
@@ -55,7 +52,7 @@ $ composer require wolfsoft/botguard-php
 ```json
 {
     "require": {
-        "wolfsoft/botguard-php": "^1.0"
+        "wolfsoft/botguard-php": "^1.1"
     }
 }
 ```
@@ -65,6 +62,7 @@ $ composer require wolfsoft/botguard-php
 require 'vendor/autoload.php';
 
 use BotGuard\BotGuard;
+use BotGuard\Profile;
 
 // the rest of the code
 ```
@@ -75,9 +73,11 @@ Why are you not using [Composer](http://getcomposer.org/)? Download [BotGuard.ph
 
 ```php
 <?php
+require 'path/to/Profile.php';
 require 'path/to/BotGuard.php';
 
 use BotGuard\BotGuard;
+use BotGuard\Profile;
 
 // the rest of the code
 ```

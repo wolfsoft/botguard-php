@@ -1,47 +1,47 @@
 {
-    "name": "wolfsoft/botguard-php",
-    "type": "library",
-    "version": "1.1.1",
-    "description": "PHP Integration Library for BotGuard web site protection service.",
-    "keywords": ["botguard","api"],
-    "homepage": "https://botguard.net/en/documentation/integration",
-    "support": {
-        "issues": "https://github.com/wolfsoft/botguard-php/issues",
-        "source": "https://github.com/wolfsoft/botguard-php"
-    },
-    "license": "MIT",
-    "authors": [{
-        "name": "Dennis Prochko",
-        "email": "wolfsoft@mail.ru"
-    }],
-    "require": {
-        "php": ">=5.6",
-        "ext-curl": "*"
-    },
-    "require-dev": {
-        "php": "^7.3",
-    	"ext-xdebug": "*",
-    	"symfony/process": "@stable",
-        "phpunit/phpunit": "@stable",
-        "phpdocumentor/phpdocumentor": "@stable"
-    },
-    "autoload": {
-        "psr-4": {
-            "BotGuard\\": "src/"
-        }
-    },
-    "autoload-dev": {
-        "psr-4": {
-            "Tests\\": "tests/"
-        }
-    },
-    "scripts": {
-    	"test-full" : [
-    		"@test",
-    		"@test-integration"
-    	],
+	"name": "wolfsoft/botguard-php",
+	"type": "library",
+	"version": "1.1.1",
+	"description": "PHP Integration Library for BotGuard web site protection service.",
+	"keywords": ["botguard","api"],
+	"homepage": "https://botguard.net/en/documentation/integration",
+	"support": {
+		"issues": "https://github.com/wolfsoft/botguard-php/issues",
+		"source": "https://github.com/wolfsoft/botguard-php"
+	},
+	"license": "MIT",
+	"authors": [{
+		"name": "Dennis Prochko",
+		"email": "wolfsoft@mail.ru"
+	}],
+	"require": {
+		"php": ">=5.6",
+		"ext-curl": "*"
+	},
+	"require-dev": {
+		"php": "^7.3",
+		"ext-xdebug": "*",
+		"symfony/process": "@stable",
+		"phpunit/phpunit": "@stable",
+		"phpdocumentor/phpdocumentor": "@stable"
+	},
+	"autoload": {
+		"psr-4": {
+			"BotGuard\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Tests\\": "tests/"
+		}
+	},
+	"scripts": {
+		"test-full" : [
+			"@test",
+			"@test-integration"
+		],
 		"test": "vendor/bin/phpunit --testsuite Unit --stderr --verbose --coverage-clover=coverage.xml",
 		"test-integration": "vendor/bin/phpunit --testsuite Integration --stderr --verbose",
-        "docs": "vendor/phpdocumentor/phpdocumentor/bin/phpdoc -d src/ -t docs/ --visibility=\"public\" && rm -rf docs/phpdoc-cache*"
-    }
+		"docs": "vendor/phpdocumentor/phpdocumentor/bin/phpdoc -d src/ -t docs/ --visibility=\"public\" && rm -rf docs/phpdoc-cache*"
+	}
 }
