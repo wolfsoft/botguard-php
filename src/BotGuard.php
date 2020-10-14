@@ -11,7 +11,7 @@ namespace BotGuard;
 
 use BotGuard\Profile;
 
-define('BOTGUARD_LIBRARY_VERSION', '1.1.1');
+define('BOTGUARD_LIBRARY_VERSION', '1.1.2');
 
 /**
  *	php-fpm compatinility function
