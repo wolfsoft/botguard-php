@@ -11,7 +11,22 @@ namespace BotGuard;
 
 use BotGuard\Profile;
 
-define('BOTGUARD_LIBRARY_VERSION', '1.1.0');
+define('BOTGUARD_LIBRARY_VERSION', '1.1.1');
+
+/**
+ *	php-fpm compatinility function
+ */
+if (!function_exists('getallheaders')) {
+	function getallheaders() {
+		$headers = [];
+		foreach ($_SERVER as $name => $value) {
+			if (substr($name, 0, 5) == 'HTTP_') {
+				$headers[str_replace(' ', '-', ucwords(strtolower(str_replace('_', ' ', substr($name, 5)))))] = $value;
+			}
+		}
+		return $headers;
+	}
+}
 
 /**
   * The class implements the BotGuard API 2.1.
@@ -124,11 +139,11 @@ class BotGuard {
 	}
 
 	/**
-     * Note: Prior to PHP 5.6, a stream opened with php://input could
-     * only be read once.
-     *
-     * @see http://php.net/manual/en/wrappers.php.php
-     */
+	 * Note: Prior to PHP 5.6, a stream opened with php://input could
+	 * only be read once.
+	 *
+	 * @see http://php.net/manual/en/wrappers.php.php
+	 */
 	protected function getInputStream() {
 		$request = "{$_SERVER['REQUEST_METHOD']} {$_SERVER['REQUEST_URI']} {$_SERVER['SERVER_PROTOCOL']}\r\n";
 		foreach(getallheaders() as $name => $value) {
@@ -141,7 +156,7 @@ class BotGuard {
 		return $request;
 	}
 
-    private function setParams(array $params = null) {
+	private function setParams(array $params = null) {
 		if (!is_null($params)) {
 			$this->params = $params;
 			curl_setopt_array($this->curl, [
